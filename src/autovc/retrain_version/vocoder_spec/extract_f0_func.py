@@ -3,7 +3,8 @@ import numpy as np
 import soundfile as sf
 import pdb
 from scipy import signal
-from librosa.filters import mel
+from librosa import filters
+import librosa
 from numpy.random import RandomState
 from pysptk import sptk
 from src.autovc.retrain_version.vocoder_spec.utils import butter_highpass
@@ -28,7 +29,7 @@ def pySTFT(x, fft_length=1024, hop_length=256):
 
 def extract_f0_func(gender):
     floor_sp, ceil_sp = -80, 30
-    mel_basis = mel(16000, 1024, fmin=90, fmax=7600, n_mels=80).T
+    mel_basis = filters.mel(sr=16000, n_fft=1024, fmin=90, fmax=7600, n_mels=80).T
     min_level = np.exp(-100 / 20 * np.log(10))
     b, a = butter_highpass(30, 16000, order=5)
 
@@ -94,7 +95,7 @@ def extract_f0_func(gender):
 
 def extract_f0_func_audiofile(audio_file, gender='M'):
     floor_sp, ceil_sp = -80, 30
-    mel_basis = mel(16000, 1024, fmin=90, fmax=7600, n_mels=80).T
+    mel_basis = filters.mel(sr=16000, n_fft=1024, fmin=90, fmax=7600, n_mels=80).T
     min_level = np.exp(-100 / 20 * np.log(10))
     b, a = butter_highpass(30, 16000, order=5)
 
